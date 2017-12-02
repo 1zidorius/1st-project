@@ -1,0 +1,1 @@
+#primityvus skaiciuotuvas
