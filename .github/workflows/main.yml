@@ -1,0 +1,39 @@
+name: Lock Branch
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  lock-branch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    steps:
+      - name: Lock Branch
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = 'main';  // Specify the branch you want to lock here
+             const response = await github.rest.repos.getBranchProtection({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               branch: branch
+             });
+             console.log(JSON.stringify(response, null, 2));
+            /*
+            await github.rest.repos.updateBranchProtection({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch,
+              required_status_checks: null,
+              enforce_admins: null,
+              restrictions: null,
+              lock_branch: true,
+            });
+            */
+            console.log(`Branch ${branch} has been locked.`);
