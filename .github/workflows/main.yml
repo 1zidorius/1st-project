@@ -3,7 +3,7 @@ name: Lock Branch
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   lock-branch:
