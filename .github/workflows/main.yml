@@ -41,7 +41,7 @@ jobs:
                repo: context.repo.repo,
                branch,
              });
-             console.log('GET_BRANCH_PROTECTION',JSON.stringify(response2, null, 2));
+             console.log('GET_BRANCH_PROTECTION',JSON.stringify(response3, null, 2));
              
              const {data} = response;           
              const {required_status_checks, enforce_admins} = data;
