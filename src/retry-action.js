@@ -4,7 +4,7 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
-export async function retryAction() {
+async function retryAction() {
   try {
     const { data: pulls } = await octokit.pulls.list({
       owner: process.env.GITHUB_REPOSITORY.split("/")[0],
@@ -44,3 +44,4 @@ export async function retryAction() {
   }
 }
 
+module.exports = retryAction;
