@@ -1,4 +1,5 @@
-const { Octokit } = require("@octokit/rest");
+// const { Octokit } = require("@octokit/rest");
+import { Octokit } from "@octokit/rest";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
@@ -13,16 +14,18 @@ async function retryAction() {
     });
 
     for (const pull of pulls) {
-      const { data: statuses } = await octokit.repos.listStatusesForRef({
+      const { data: statuses } = await octokit.checks.listForRef({
         owner: process.env.GITHUB_REPOSITORY.split("/")[0],
         repo: process.env.GITHUB_REPOSITORY.split("/")[1],
         ref: pull.head.sha,
       });
 
+
+
       console.log('statuses', JSON.stringify(statuses, null, 2))
 
-      const actionRun = statuses.find((status) => status.context === "Lock Branch");
-
+      const actionRun = statuses.check_runs.find((status) => status.name === "Lock Branch");
+§
       // if (actionRun && actionRun.state === "failure") {
       if (actionRun) {
         // Retry your action by creating a new status with the same context and the 'pending' state
