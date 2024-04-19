@@ -30,14 +30,21 @@ async function retryAction() {
       if (actionRun) {
         // Retry your action by creating a new status with the same context and the 'pending' state
         try {
-          await octokit.repos.createCommitStatus({
+        //   await octokit.repos.createCommitStatus({
+        //     owner: process.env.GITHUB_REPOSITORY.split("/")[0],
+        //     repo: process.env.GITHUB_REPOSITORY.split("/")[1],
+        //     sha: pull.head.sha,
+        //     state: "pending",
+        //     context: "lock-branch",
+        //     description: "Retrying GitHub Action...",
+        // });
+          await octokit.repos.getCommit({
             owner: process.env.GITHUB_REPOSITORY.split("/")[0],
             repo: process.env.GITHUB_REPOSITORY.split("/")[1],
             sha: pull.head.sha,
-            state: "pending",
-            context: "lock-branch",
-            description: "Retrying GitHub Action...",
         });
+
+
         console.log('successfully created commit status')
         } catch (e) {
           console.error(`could not create commit status for commit ${pull.head.sha}`, e)
