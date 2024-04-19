@@ -56,7 +56,11 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 branch,
-                required_status_checks,
+                required_status_checks: {
+                strict: required_status_checks.strict,
+                contexts: required_status_checks.contexts,
+                checks: required_status_checks.checks,
+                },
                 enforce_admins: enforce_admins.enabled,
                 lock_branch: true,
                 restrictions,
