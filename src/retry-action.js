@@ -38,6 +38,7 @@ async function retryAction() {
             context: "lock-branch",
             description: "Retrying GitHub Action...",
         });
+        console.log('successfully created commit status')
         } catch (e) {
           console.error(`could not create commit status for commit ${pull.head.sha}`, e)
         }
