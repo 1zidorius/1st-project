@@ -5,7 +5,6 @@
   "main": "index.js",
   "repository": "https://github.com/1zidorius/1st-project.git",
   "author": "viliusmileris <viliusm@wix.com>",
-  "type": "module",
   "license": "MIT",
   "dependencies": {
     "@octokit/rest": "^20.1.0"
