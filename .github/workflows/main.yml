@@ -24,7 +24,6 @@ jobs:
             console.log('GET BRANCH PROTECTION', JSON.stringify(response, null, 2));
             const { data } = response;
             
-            
             let restrictions = null;
             try {
               const response = await github.rest.repos.getAccessRestrictions({
@@ -50,10 +49,10 @@ jobs:
                 JSON.stringify(e, null, 2)
               );
             }
-
-            const {url, ...required_pull_request_reviews} = response.data.required_pull_request_reviews;
+            
+            const { url, ...required_pull_request_reviews } = response.data.required_pull_request_reviews;
             const enforce_admins = response.data.enforce_admins.enabled;
-            const {url, contexts_url, ...required_status_checks} = response.data.required_status_checks;
+            const { url: url1, contexts_url, ...required_status_checks } = response.data.required_status_checks;
             
             try {
               await github.rest.repos.updateBranchProtection({
@@ -73,6 +72,7 @@ jobs:
                 JSON.stringify(e, null, 2)
               );
             }
+
 
             
 
