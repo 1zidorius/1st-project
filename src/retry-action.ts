@@ -34,7 +34,7 @@ async function retryAction() {
           repo: process.env.GITHUB_REPOSITORY.split("/")[1],
           sha: pull.head.sha,
           state: "failure",
-          context: "Lock Branch",
+          context: "lock-branch",
           description: "Retrying GitHub Action...",
         });
       }
