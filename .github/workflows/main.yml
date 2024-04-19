@@ -26,25 +26,16 @@ jobs:
              });
               console.log('GET_BRANCH_PROTECTION',JSON.stringify(response, null, 2));
 
-              /*
               const response2 = await github.rest.repos.getAccessRestrictions({
-               owner: context.repo.owner,
-               repo: context.repo.repo,
-               branch: 'readme-edit',
-             });
-             console.log('GET_BRANCH_PROTECTION',JSON.stringify(response2, null, 2));
-             */
-
-             
-              const response3 = await github.rest.repos.getPullRequestReviewProtection({
                owner: context.repo.owner,
                repo: context.repo.repo,
                branch,
              });
-             console.log('GET_BRANCH_PROTECTION',JSON.stringify(response3, null, 2));
+             console.log('GET_BRANCH_PROTECTION',JSON.stringify(response2, null, 2));
+
              
              const {data} = response;           
-             const {required_status_checks, enforce_admins} = data;
+             const {required_status_checks, enforce_admins, required_pull_request_reviews} = data;
 
              /*
             await github.rest.repos.updateBranchProtection({
@@ -55,6 +46,7 @@ jobs:
               enforce_admins,
               lock_branch: true,
               restrictions: null,
+              required_pull_request_reviews,
             });
             console.log(`Branch ${branch} has been locked.`);
             */
