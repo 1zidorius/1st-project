@@ -1,12 +1,12 @@
 name: Lock Branch
 
 on:
-  push:
-    branches:
-      - master
+  pull_request:
+    types: [ labeled ]
 
 jobs:
   lock-branch:
+    if: ${{ github.event.label.name == 'auto-release' }}
     runs-on: ubuntu-latest
     steps:
       - name: Lock Branch
