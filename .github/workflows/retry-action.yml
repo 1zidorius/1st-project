@@ -1,0 +1,17 @@
+name: Retry GitHub Action
+
+on:
+  pull_request:
+    types: [ opened ]
+
+jobs:
+  retry-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Retry specific GitHub Action
+        uses: ./.github/scripts/retry-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
