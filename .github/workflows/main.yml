@@ -21,7 +21,6 @@ jobs:
               repo: context.repo.repo,
               branch,
             });
-            console.log('GET BRANCH PROTECTION', JSON.stringify(response, null, 2));
             const { data } = response;
             
             let restrictions = null;
@@ -31,8 +30,6 @@ jobs:
                 repo: context.repo.repo,
                 branch,
               });
-            
-              console.log('GET GET ACCESS RESTRICTIONS', JSON.stringify(response, null, 2));
             
               if (response.status === 200) {
                 const { data } = response;
@@ -65,7 +62,7 @@ jobs:
                 restrictions,
                 lock_branch: true,
               });
-              console.log(`Branch ${branch} has been locked.`);
+              console.log(`Branch ${branch} has been locked successfully.`);
             } catch (e) {
               console.error(
                 `Couldn't update branch protection for ${branch} branch.`,
