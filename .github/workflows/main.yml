@@ -18,7 +18,7 @@ jobs:
         with:
           github-token: ${{ secrets.MERGE_FREEZE_WITH_EXPIRATION }}
           script: |
-            const branch = 'main';  // Specify the branch you want to lock here
+            const branch = 'master';  // Specify the branch you want to lock here
              const response = await github.rest.repos.getBranchProtection({
                owner: context.repo.owner,
                repo: context.repo.repo,
