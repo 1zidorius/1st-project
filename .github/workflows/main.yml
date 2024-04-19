@@ -41,10 +41,15 @@ jobs:
                 JSON.stringify(response, null, 2)
               );
             } catch (e) {
-              console.error(
-                `Couldn't get access restrictions for ${branch} branch.`,
-                JSON.stringify(e, null, 2)
-              );
+              if (e.status === 404) {
+                console.error(
+                  `Couldn't get access restrictions for ${branch} branch. Push restrictions not enabled.`);
+              } else {
+                console.error(
+                  `Couldn't get access restrictions for ${branch} branch.`,
+                  JSON.stringify(e, null, 2)
+                );
+              }
             }
             
             const { url, ...required_pull_request_reviews } = response.data.required_pull_request_reviews;
