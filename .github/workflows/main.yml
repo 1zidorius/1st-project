@@ -49,7 +49,7 @@ jobs:
             
             const { url, ...required_pull_request_reviews } = response.data.required_pull_request_reviews;
             const enforce_admins = response.data.enforce_admins.enabled;
-            const { url: url1, contexts_url, ...required_status_checks } = response.data.required_status_checks;
+            // const { url: url1, contexts_url, ...required_status_checks } = response.data.required_status_checks;
             
             try {
               await github.rest.repos.updateBranchProtection({
