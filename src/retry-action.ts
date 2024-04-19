@@ -25,7 +25,7 @@ async function retryAction() {
       console.log('statuses', JSON.stringify(statuses, null, 2))
 
       const actionRun = statuses.check_runs.find((status) => status.name === "Lock Branch");
-§
+
       // if (actionRun && actionRun.state === "failure") {
       if (actionRun) {
         // Retry your action by creating a new status with the same context and the 'pending' state
