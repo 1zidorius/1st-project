@@ -11,8 +11,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
-      - run: yarn
       - uses: actions/checkout@v3
+      - run: yarn
       - uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.MERGE_FREEZE_ALL_PERM }}
