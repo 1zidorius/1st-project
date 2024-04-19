@@ -21,6 +21,7 @@ async function retryAction() {
 
 
 
+      console.log('pull', JSON.stringify(pull, null, 2))
       console.log('statuses', JSON.stringify(statuses, null, 2))
 
       const actionRun = statuses.check_runs.find((status) => status.name === "lock-branch");
