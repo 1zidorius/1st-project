@@ -23,7 +23,7 @@ jobs:
             });
             console.log('GET BRANCH PROTECTION', JSON.stringify(response, null, 2));
             const { data } = response;
-            const { required_status_checks, enforce_admins, required_pull_request_reviews } = data;
+            
             
             let restrictions = null;
             try {
@@ -50,21 +50,21 @@ jobs:
                 JSON.stringify(e, null, 2)
               );
             }
+
+            const {url, ...required_pull_request_reviews} = response.data.required_pull_request_reviews;
+            const enforce_admins = response.data.enforce_admins.enabled;
+            const {url, contexts_url, ...required_status_checks} = response.data.required_status_checks;
             
             try {
               await github.rest.repos.updateBranchProtection({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 branch,
-                required_status_checks: {
-                strict: required_status_checks.strict,
-                contexts: required_status_checks.contexts,
-                checks: required_status_checks.checks,
-                },
-                enforce_admins: enforce_admins.enabled,
-                lock_branch: true,
-                restrictions,
+                required_status_checks,
+                enforce_admins,
                 required_pull_request_reviews,
+                restrictions,
+                lock_branch: true,
               });
               console.log(`Branch ${branch} has been locked.`);
             } catch (e) {
