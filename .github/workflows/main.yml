@@ -22,7 +22,7 @@ jobs:
              const response = await github.rest.repos.getBranchProtection({
                owner: context.repo.owner,
                repo: context.repo.repo,
-               branch: branch
+               branch,
              });
               console.log('GET_BRANCH_PROTECTION',JSON.stringify(response, null, 2));
 
@@ -34,10 +34,19 @@ jobs:
              });
              console.log('GET_BRANCH_PROTECTION',JSON.stringify(response2, null, 2));
              */
+
+             
+              const response3 = await github.rest.repos.getPullRequestReviewProtection({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               branch,
+             });
+             console.log('GET_BRANCH_PROTECTION',JSON.stringify(response2, null, 2));
              
              const {data} = response;           
              const {required_status_checks, enforce_admins} = data;
-             
+
+             /*
             await github.rest.repos.updateBranchProtection({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -45,5 +54,7 @@ jobs:
               required_status_checks,
               enforce_admins,
               lock_branch: true,
+              restrictions: null,
             });
             console.log(`Branch ${branch} has been locked.`);
+            */
