@@ -57,7 +57,7 @@ jobs:
                 repo: context.repo.repo,
                 branch,
                 required_status_checks,
-                enforce_admins,
+                enforce_admins: enforce_admins.enabled,
                 lock_branch: true,
                 restrictions,
                 required_pull_request_reviews,
