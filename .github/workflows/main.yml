@@ -55,7 +55,7 @@ jobs:
               required_status_checks,
               enforce_admins,
               lock_branch: true,
-              restrictions: null,
+              restrictions,
               required_pull_request_reviews,
             });
             console.log(`Branch ${branch} has been locked.`);
