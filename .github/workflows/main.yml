@@ -21,6 +21,7 @@ jobs:
               repo: context.repo.repo,
               branch,
             });
+            console.log('GET BRANCH PROTECTION', JSON.stringify(response,null, 2) );
             const { data } = response;
             const { required_status_checks, enforce_admins, required_pull_request_reviews } = data;
             
@@ -31,6 +32,8 @@ jobs:
                 repo: context.repo.repo,
                 branch,
               });
+
+              console.log('GET GET ACCESS RESTRICTIONS', JSON.stringify(response,null, 2) );
             
               if (response.status === 200) {
                 const { data } = response;
@@ -47,7 +50,7 @@ jobs:
                 JSON.stringify(response, null, 2)
               );
             }
-            
+            /*
             await github.rest.repos.updateBranchProtection({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -59,4 +62,5 @@ jobs:
               required_pull_request_reviews,
             });
             console.log(`Branch ${branch} has been locked.`);
+            */
 
