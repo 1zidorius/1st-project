@@ -34,7 +34,7 @@ async function retryAction() {
             owner: process.env.GITHUB_REPOSITORY.split("/")[0],
             repo: process.env.GITHUB_REPOSITORY.split("/")[1],
             sha: pull.head.sha,
-            state: "failure",
+            state: "pending",
             context: "lock-branch",
             description: "Retrying GitHub Action...",
         });
