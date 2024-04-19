@@ -17,6 +17,6 @@ jobs:
         with:
           github-token: ${{ secrets.MERGE_FREEZE_ALL_PERM }}
           script: |
-            const { default: retryActions } = await import('${{ github.workspace }}/src/retry-actions.js')
+            const { default: retryActions } = await import('${{ github.workspace }}/src/retry-action.js')
 
             await retryActions()
