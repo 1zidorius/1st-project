@@ -16,7 +16,7 @@ jobs:
       - name: Lock Branch
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.MERGE_FREEZE_NO_EXPIRATION }}
+          github-token: ${{ secrets.MERGE_FREEZE_ALL_PERM }}
           script: |
             const branch = 'master';  // Specify the branch you want to lock here
              const response = await github.rest.repos.getBranchProtection({
