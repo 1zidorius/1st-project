@@ -38,11 +38,13 @@ async function retryAction() {
         //     context: "lock-branch",
         //     description: "Retrying GitHub Action...",
         // });
-          await octokit.repos.getCommit({
+          const commit = await octokit.repos.getCommit({
             owner: process.env.GITHUB_REPOSITORY.split("/")[0],
             repo: process.env.GITHUB_REPOSITORY.split("/")[1],
             sha: pull.head.sha,
         });
+
+        console.log('commitDEBUG', JSON.stringify(commit, null, 2))
 
 
         console.log('successfully created commit status')
