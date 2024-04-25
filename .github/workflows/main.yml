@@ -28,7 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fail if merge freeze issue is open
-        if: steps.get-merge-freeze-issue-data.outputs.data.state == 'open'
+        if: fromJson(steps.get-merge-freeze-issue-data.outputs.data).state == 'open'
         run: exit 1
 
       - name: 🔒 Enabling the merge freeze
