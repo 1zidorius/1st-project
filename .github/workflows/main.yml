@@ -10,7 +10,6 @@ on:
 
 jobs:
   lock-branch:
-    if: ${{ github.event.label.name == 'auto-release' }}
     runs-on: ubuntu-latest
     steps:
       - name: Lock Branch
