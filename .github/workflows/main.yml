@@ -1,6 +1,12 @@
 name: Lock Branch
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      parameter:
+        description: My Parameter
+  pull_request:
+    types: [ labeled ]
 
 jobs:
   lock-branch:
