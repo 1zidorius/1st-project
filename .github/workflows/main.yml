@@ -3,8 +3,10 @@ name: Lock Branch
 on:
   workflow_dispatch:
     inputs:
-      parameter:
-        description: My Parameter
+      refToBuild:
+        description: 'Branch, tag or commit SHA1 to build'
+        required: true
+        type: string
   pull_request:
     types: [ labeled ]
 
@@ -16,6 +18,10 @@ jobs:
   lock-branch:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.refToBuild }}
+
       - name: 👀 Checking if the merge freeze issue is closed
         id: get-merge-freeze-issue-data
         uses: octokit/request-action@v2.x
