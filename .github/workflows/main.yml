@@ -1,6 +1,7 @@
 name: Lock Branch
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [ labeled ]
 
@@ -15,14 +16,14 @@ jobs:
           github-token: ${{ secrets.MERGE_FREEZE_ALL_PERM }}
           script: |
             const branch = 'master';
-            
+
             const response = await github.rest.repos.getBranchProtection({
               owner: context.repo.owner,
               repo: context.repo.repo,
               branch,
             });
             const { data } = response;
-            
+
             let restrictions = null;
             try {
               const response = await github.rest.repos.getAccessRestrictions({
@@ -30,7 +31,7 @@ jobs:
                 repo: context.repo.repo,
                 branch,
               });
-            
+
               if (response.status === 200) {
                 const { data } = response;
                 const { users, teams, apps } = { data };
@@ -51,11 +52,11 @@ jobs:
                 );
               }
             }
-            
+
             const { url, ...required_pull_request_reviews } = response.data.required_pull_request_reviews;
             const enforce_admins = response.data.enforce_admins.enabled;
             // const { url: url1, contexts_url, ...required_status_checks } = response.data.required_status_checks;
-            
+
             try {
               await github.rest.repos.updateBranchProtection({
                 owner: context.repo.owner,
@@ -76,5 +77,5 @@ jobs:
             }
 
 
-            
+
 
