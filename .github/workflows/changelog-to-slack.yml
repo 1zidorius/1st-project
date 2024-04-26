@@ -22,8 +22,9 @@ jobs:
 
       - name: Retrieve Changelog
         run: |
-          {
-            echo 'git diff "HEAD^" --word-diff=porcelain -- ./CHANGELOG.md | grep '^\+' | sed 's/^+//' | tail -n +2 << EOF'
+         {
+            echo 'CHANGELOG<<EOF'
+            git diff "HEAD^" --word-diff=porcelain -- ./CHANGELOG.md | grep '^\+' | sed 's/^+//' | tail -n +2
             echo EOF
           } >> "$GITHUB_ENV"
         id: changelog
