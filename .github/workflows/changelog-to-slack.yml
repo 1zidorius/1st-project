@@ -60,14 +60,14 @@ jobs:
                       {
                         "type": "plain_text",
                         "text": "New version of Ricos has been released! :rich-content-platform:",
-                      },
-                    ],
+                      }
+                    ]
                   },
                   {
                     "type": "section",
                     "text": {
                       "type": "mrkdwn",
-                      "text": ${{steps.set-result.outputs.result}},
+                      "text": ${{steps.set-result.outputs.result}}
                     }
                   }
                 ]
