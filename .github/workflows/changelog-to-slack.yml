@@ -14,4 +14,6 @@ jobs:
 
     steps:
       - name: Send message to slack
-        run: echo "Sending message to slack"
+        run: |
+          echo "Sending message to slack";
+          git diff "HEAD^" --word-diff=porcelain -- ./CHANGELOG.md | grep '^\+' | sed 's/^+//' | tail -n +2
