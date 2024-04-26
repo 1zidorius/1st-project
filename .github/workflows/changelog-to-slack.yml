@@ -1,0 +1,17 @@
+name: "Notify Slack on Version Bump PR"
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - closed
+
+jobs:
+  notify_slack:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore(*):') && contains(github.event.pull_request.title, 'release')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send message to slack
+        run: echo "Sending message to slack"
