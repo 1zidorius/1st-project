@@ -1,3 +1,10 @@
+## 10.21.9 (April 4, 2024)
+
+### :bug: Bug Fix
+
+- `toolbars-v3`
+  - [#6199](https://github.com/wix/ricos/issues/6199) dont render gradient at all when it is not needed 9
+
 ## 10.21.8 (April 4, 2024)
 
 ### :bug: Bug Fix
