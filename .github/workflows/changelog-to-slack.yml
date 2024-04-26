@@ -45,7 +45,7 @@ jobs:
             const { CHANGELOG } = process.env;
             const message = slackifyMarkdown(CHANGELOG);
             console.log(message);
-            return JSON.stringify(message);
+            return message;
 
       - name: Send message to Slack
         uses: slackapi/slack-github-action@v1.26.0
