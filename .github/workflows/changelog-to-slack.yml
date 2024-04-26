@@ -37,7 +37,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const { slackifyMarkdown } = require('slackify-markdown');
+            const slackifyMarkdown = require('slackify-markdown');
             const { CHANGELOG } = process.env;
             const message = slackifyMarkdown(CHANGELOG);
             console.log(message);
