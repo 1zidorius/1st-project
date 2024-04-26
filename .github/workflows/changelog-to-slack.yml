@@ -2,10 +2,7 @@ name: "Notify Slack on Version Bump PR"
 
 on:
   pull_request:
-    branches:
-      - master
-    types:
-      - closed
+    types: [opened, synchronize]
 
 env:
   SLACK_CHANNEL_ID: 'ricos-dev-releases'
