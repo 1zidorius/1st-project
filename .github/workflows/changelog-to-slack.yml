@@ -23,7 +23,7 @@ jobs:
       - name: Retrieve Changelog
         run: |
           {
-            echo "CHANGELOG=$(git diff "HEAD^" --word-diff=porcelain -- ./CHANGELOG.md | grep '^\+' | sed 's/^+//' | tail -n +2)"<<EOF
+            echo 'git diff "HEAD^" --word-diff=porcelain -- ./CHANGELOG.md | grep '^\+' | sed 's/^+//' | tail -n +2 << EOF'
             echo EOF
           } >> "$GITHUB_ENV"
         id: changelog
