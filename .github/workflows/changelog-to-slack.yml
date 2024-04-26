@@ -55,19 +55,19 @@ jobs:
               {
                 "blocks": [
                   {
-                    type: "section",
-                    fields: [
+                    "type": "section",
+                    "fields": [
                       {
-                        type: "plain_text",
-                        text: "New version of Ricos has been released! :rich-content-platform:",
+                        "type": "plain_text",
+                        "text": "New version of Ricos has been released! :rich-content-platform:",
                       },
                     ],
                   },
                   {
-                    type: "section",
-                    text: {
-                      type: "mrkdwn",
-                      text: ${{steps.set-result.outputs.result}},
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ${{steps.set-result.outputs.result}},
                     }
                   }
                 ]
