@@ -9,7 +9,7 @@ env:
 
 jobs:
   notify_slack:
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'release(*):')
+    if: startsWith(github.event.pull_request.title, 'release(*):')
     runs-on: ubuntu-latest
 
     steps:
