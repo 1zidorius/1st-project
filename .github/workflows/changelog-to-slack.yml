@@ -6,7 +6,7 @@ on:
 
 jobs:
   notify_slack:
-    if: contains(github.event.pull_request.title, 'chore(*):\ release')
+    if: contains(github.event.pull_request.title, 'chore(*):')
     runs-on: ubuntu-latest
 
     steps:
