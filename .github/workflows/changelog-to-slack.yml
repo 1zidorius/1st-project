@@ -18,6 +18,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          sparse-checkout: |
+            CHANGELOG.md
+          sparse-checkout-cone-mode: false
           fetch-depth: 5
 
       - name: Retrieve Changelog
