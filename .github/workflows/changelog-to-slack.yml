@@ -2,11 +2,12 @@ name: "Notify Slack on Version Bump PR"
 
 on:
   pull_request:
-    types: [opened, synchronize, edited]
+    types:
+      - closed
 
 jobs:
   notify_slack:
-    if: startsWith(github.event.pull_request.title, 'chore(*):') && contains(github.event.pull_request.title, 'release')
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore(*):') && contains(github.event.pull_request.title, 'release')
     runs-on: ubuntu-latest
 
     steps:
