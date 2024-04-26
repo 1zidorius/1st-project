@@ -67,7 +67,7 @@ jobs:
                     type: "section",
                     text: {
                       type: "mrkdwn",
-                      text: "${{steps.set-result.outputs.result}}",
+                      text: ${{steps.set-result.outputs.result}},
                     }
                   }
                 ]
