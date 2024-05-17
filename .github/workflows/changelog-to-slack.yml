@@ -47,7 +47,7 @@ jobs:
             let attempt = 0;
             let versionsExists = false;
 
-            while (attempt < maxAttempts || !versionsExists) {
+            while (attempt < maxAttempts && !versionsExists) {
 
               fetch('https://static.parastorage.com/unpkg/'+ packageName+ '@' + targetVersion)
                 .then(response => {
