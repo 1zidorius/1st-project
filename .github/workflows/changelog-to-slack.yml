@@ -42,36 +42,35 @@ jobs:
           result-encoding: string
           script: |
             const slackifyMarkdown = require('slackify-markdown');
-            const { CHANGELOG } = process.env;
-            const message = slackifyMarkdown(CHANGELOG);
-            console.log(message);
-            return message;
+            const packageJson = require('./package.json');
+            console.log('DEBUG packageJson', packageJson.version)
 
-      - name: Send message to Slack
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-            channel-id: ${env.SLACK_CHANNEL_ID}
-            payload: |
-              {
-                "blocks": [
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "plain_text",
-                        "text": "New version of Ricos has been released!"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": ${{steps.set-result.outputs.result}}
-                    }
-                  }
-                ]
-              }
+
+      # - name: Send message to Slack
+      #   uses: slackapi/slack-github-action@v1.26.0
+      #   with:
+      #       channel-id: ${env.SLACK_CHANNEL_ID}
+      #       payload: |
+      #         {
+      #           "blocks": [
+      #             {
+      #               "type": "section",
+      #               "fields": [
+      #                 {
+      #                   "type": "plain_text",
+      #                   "text": "New version of Ricos has been released!"
+      #                 }
+      #               ]
+      #             },
+      #             {
+      #               "type": "section",
+      #               "text": {
+      #                 "type": "mrkdwn",
+      #                 "text": ${{steps.set-result.outputs.result}}
+      #               }
+      #             }
+      #           ]
+      #         }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
