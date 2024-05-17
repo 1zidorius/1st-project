@@ -14,6 +14,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            CHANGELOG.md
+            package.json
+          sparse-checkout-cone-mode: false
+          fetch-depth: 5
 
       - name: Retrieve Changelog
         run: |
@@ -33,9 +39,34 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const script = require('../.github/scripts/check-package-version.js')
-            const result = await script();
-            console.log('DEBUG result', result);
+            const packageJson = require('./package.json');
+            const packageName = 'ricos-schema'; // Replace with your package name
+            const targetVersion = packageJson.version;
+
+            const maxAttempts = 5;
+            let attempt = 0;
+            let versionsExists = false;
+
+            while (attempt < maxAttempts || !versionsExists) {
+
+              fetch('https://static.parastorage.com/unpkg/'+ packageName+ '@' + targetVersion)
+                .then(response => {
+                  if (response.ok) {
+                    versionsExists = true;
+                    console.log('Package with the given version exists!');
+                  }
+                })
+                .catch(() => {
+                  attempt++;
+                });
+              await new Promise(resolve => setTimeout(resolve, 60000));
+            }
+
+            if (versionsExists) {
+              return true;
+            }
+
+            return false;
 
 
       # - name: Convert Changelog to Slack Markdown
