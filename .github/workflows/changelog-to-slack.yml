@@ -41,7 +41,7 @@ jobs:
             const packageJson = require('./package.json');
             console.log('DEBUG packageJson', packageJson.version)
 
-            fetch('https://static.parastorage.com/unpkg/ricos-schema@10.30.7')
+            fetch('https://static.parastorage.com/unpkg/ricos-schema@11.30.7')
               .then(response => response.ok ? console.log('Version exists!') : Promise.reject(response))
               .catch(error => console.error('Error:', error));
 
