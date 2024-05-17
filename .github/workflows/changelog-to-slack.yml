@@ -39,18 +39,20 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-
-
-
-      - name: Convert Changelog to Slack Markdown
-        uses: actions/github-script@v7
-        id: set-result
-        with:
-          result-encoding: string
-          script: |
             const script = require('./check-package-version.js')
             const result = await script();
             console.log('DEBUG result', result);
+
+
+      # - name: Convert Changelog to Slack Markdown
+      #   uses: actions/github-script@v7
+        # id: set-result
+      #   with:
+      #     result-encoding: string
+      #     script: |
+      #       const slackifyMarkdown = require('slackify-markdown');
+      #       const packageJson = require('./package.json');
+      #       console.log('DEBUG packageJson', packageJson.version)
 
 
       # - name: Send message to Slack
