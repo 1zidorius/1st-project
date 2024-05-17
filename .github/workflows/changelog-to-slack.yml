@@ -42,9 +42,8 @@ jobs:
             console.log('DEBUG packageJson', packageJson.version)
 
             fetch('https://static.parastorage.com/unpkg/ricos-schema@10.30.7')
-            .then(response => response.json())
-            .then(data => console.log(data))
-            .catch(error => console.error('Error:', error));
+              .then(response => response.ok ? console.log('Version exists!') : Promise.reject(response))
+              .catch(error => console.error('Error:', error));
 
       # - name: Convert Changelog to Slack Markdown
       #   uses: actions/github-script@v7
