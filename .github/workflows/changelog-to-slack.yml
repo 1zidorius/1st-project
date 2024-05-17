@@ -18,8 +18,7 @@ jobs:
           sparse-checkout: |
             CHANGELOG.md
             package.json
-            .github/scripts
-          sparse-checkout-cone-mode: false
+            .github
           fetch-depth: 5
 
       - name: Retrieve Changelog
