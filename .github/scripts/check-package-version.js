@@ -37,6 +37,4 @@ async function checkPackageVersion() {
   return false;
 }
 
-(async () => {
-  await checkPackageVersion();
-})();
+module.exports = checkPackageVersion;
