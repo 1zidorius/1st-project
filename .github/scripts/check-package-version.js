@@ -8,7 +8,7 @@ async function checkPackageVersion() {
   let versionsExists = false;
 
   while (attempt < maxAttempts || !versionsExists) {
-    console.log(`Attempt ${attempt + 1}: Checking ${packageName} version...`);
+    console.log('Attempt '+attempt + 1+': Checking '+packageName+' version...');
 
     fetch('https://static.parastorage.com/unpkg/ricos-schema@' + targetVersion)
       .then(response => {
@@ -18,7 +18,7 @@ async function checkPackageVersion() {
         }
       })
       .catch(() => {
-        console.log(`Target version: ${targetVersion} not found. Retrying in 1 minute...`);
+        console.log('Target version: '+targetVersion+' not found. Retrying in 1 minute...');
         attempt++;
       });
 
@@ -26,12 +26,12 @@ async function checkPackageVersion() {
   }
 
   if (versionsExists) {
-    console.log(`Found package ${packageName}@${targetVersion} after ${attempt + 1} attempts.`);
+    console.log('Found package ' + packageName + '@' + targetVersion + ' after ' + (attempt + 1) + ' attempts.');
     return true;
   }
 
   console.error(
-    `Failed to find package ${packageName}@${targetVersion} after ${maxAttempts} attempts.`
+    'Failed to find package ' + packageName + '@' + targetVersion + ' after ' + maxAttempts + ' attempts.'
   );
 
   return false;

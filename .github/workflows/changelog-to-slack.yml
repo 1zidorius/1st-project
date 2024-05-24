@@ -11,6 +11,7 @@ jobs:
   notify_slack:
     if: startsWith(github.event.pull_request.title, 'release(*):')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -40,33 +41,50 @@ jobs:
         with:
           script: |
             const packageJson = require('./package.json');
-            const packageName = 'ricos-schema'; // Replace with your package name
-            const targetVersion = packageJson.version;
+            const PACKAGE_NAME = 'ricos-schema';
+            const TARGET_VERSION = packageJson.version;
 
-            const maxAttempts = 5;
-            let attempt = 0;
-            let versionsExists = false;
+            const TIMEOUT_MINUTES = 5;
+            const CHECK_INTERVAL = 60 * 1000; // 60 seconds
 
-            while (attempt < maxAttempts && !versionsExists) {
-
-              fetch('https://static.parastorage.com/unpkg/'+ packageName+ '@' + targetVersion)
+            const checkPackage = () => {
+              fetch('https://static.parastorage.com/unpkg/'+ PACKAGE_NAME+ '@' + TARGET_VERSION)
                 .then(response => {
                   if (response.ok) {
-                    versionsExists = true;
                     console.log('Package with the given version exists!');
+                    return true;
                   }
                 })
                 .catch(() => {
-                  attempt++;
+                  console.log('Target version: '+TARGET_VERSION+' not found');
+                  return false;
                 });
-              await new Promise(resolve => setTimeout(resolve, 60000));
-            }
+            };
 
-            if (versionsExists) {
-              return true;
-            }
+            const main = async () => {
+              const endTime = Date.now() + TIMEOUT_MINUTES * 60 * 1000;
 
-            return false;
+              while (Date.now() < endTime) {
+                try {
+                  const isPublished = await checkPackage();
+                  if (isPublished) {
+                    console.log(`Package ${PACKAGE_NAME} is published.`);
+                    process.exit(0);
+                  } else {
+                    console.log(`Package ${PACKAGE_NAME} is not published yet.`);
+                    await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
+                  }
+                } catch (error) {
+                  console.error(error);
+                  process.exit(1);
+                }
+              }
+
+              console.log(`Timeout reached. Package ${PACKAGE_NAME} is not published.`);
+              process.exit(1);
+            };
+
+            await main();
 
 
       # - name: Convert Changelog to Slack Markdown
