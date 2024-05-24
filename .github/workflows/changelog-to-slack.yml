@@ -8,32 +8,20 @@ env:
   SLACK_CHANNEL_ID: 'ricos-dev-releases'
 
 jobs:
-  notify_slack:
+  verify-package-published:
     if: startsWith(github.event.pull_request.title, 'release(*):')
     runs-on: ubuntu-latest
     timeout-minutes: 10
-
     steps:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            CHANGELOG.md
             package.json
           sparse-checkout-cone-mode: false
           fetch-depth: 5
 
-      - name: Retrieve Changelog
-        run: |
-         {
-            echo 'CHANGELOG<<EOF'
-            git diff "HEAD^" --word-diff=porcelain -- ./CHANGELOG.md | grep '^\+' | sed 's/^+//' | tail -n +2
-            echo EOF
-          } >> "$GITHUB_ENV"
-        id: changelog
-
       - name: Setup dependencies
         uses: actions/setup-node@v3
-        id: does-version-exist
         with:
           node-version: '20.x'
       - name: Check whether version is published
@@ -86,43 +74,69 @@ jobs:
 
             await main();
 
+  send-message-to-slack:
+    needs: verify-package-published
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            CHANGELOG.md
+          sparse-checkout-cone-mode: false
+          fetch-depth: 5
 
-      # - name: Convert Changelog to Slack Markdown
-      #   uses: actions/github-script@v7
-        # id: set-result
-      #   with:
-      #     result-encoding: string
-      #     script: |
-      #       const slackifyMarkdown = require('slackify-markdown');
-      #       const packageJson = require('./package.json');
-      #       console.log('DEBUG packageJson', packageJson.version)
+      - name: Retrieve Changelog
+        run: |
+         {
+            echo 'CHANGELOG<<EOF'
+            git diff "HEAD^" --word-diff=porcelain -- ./CHANGELOG.md | grep '^\+' | sed 's/^+//' | tail -n +2
+            echo EOF
+          } >> "$GITHUB_ENV"
+        id: changelog
 
+      - name: Setup dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      - run: npm install slackify-markdown
 
-      # - name: Send message to Slack
-      #   uses: slackapi/slack-github-action@v1.26.0
-      #   with:
-      #       channel-id: ${env.SLACK_CHANNEL_ID}
-      #       payload: |
-      #         {
-      #           "blocks": [
-      #             {
-      #               "type": "section",
-      #               "fields": [
-      #                 {
-      #                   "type": "plain_text",
-      #                   "text": "New version of Ricos has been released!"
-      #                 }
-      #               ]
-      #             },
-      #             {
-      #               "type": "section",
-      #               "text": {
-      #                 "type": "mrkdwn",
-      #                 "text": ${{steps.set-result.outputs.result}}
-      #               }
-      #             }
-      #           ]
-      #         }
+      - name: Convert Changelog to Slack Markdown
+        uses: actions/github-script@v7
+        id: set-result
+        with:
+          result-encoding: string
+          script: |
+            const slackifyMarkdown = require('slackify-markdown');
+            const { CHANGELOG } = process.env;
+            const message = slackifyMarkdown(CHANGELOG);
+            console.log(message);
+            return JSON.stringify(message);
+
+      - name: Send message to Slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+            channel-id: ${env.SLACK_CHANNEL_ID}
+            payload: |
+              {
+                "blocks": [
+                  {
+                    "type": "section",
+                    "fields": [
+                      {
+                        "type": "plain_text",
+                        "text": "New version of Ricos has been released!"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "section",
+                    "text": {
+                      "type": "mrkdwn",
+                      "text": ${{steps.set-result.outputs.result}}
+                    }
+                  }
+                ]
+              }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
