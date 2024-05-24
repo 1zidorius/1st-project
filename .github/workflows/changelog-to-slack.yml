@@ -30,7 +30,8 @@ jobs:
           script: |
             const packageJson = require('./package.json');
             const PACKAGE_NAME = 'ricos-schema';
-            const TARGET_VERSION = packageJson.version;
+            // const TARGET_VERSION = packageJson.version;
+            const TARGET_VERSION = '10.31.0';
 
             const TIMEOUT_MINUTES = 5;
             const CHECK_INTERVAL = 60 * 1000; // 60 seconds
