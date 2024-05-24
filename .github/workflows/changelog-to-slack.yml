@@ -52,10 +52,9 @@ jobs:
 
             const main = async () => {
               const endTime = Date.now() + TIMEOUT_MINUTES * 60 * 1000;
-              let isPublished = false;
-              while (Date.now() < endTime || !isPublished) {
+              while (Date.now() < endTime) {
                 try {
-                  isPublished = await checkPackage();
+                  const isPublished = await checkPackage();
                   if (isPublished) {
                     console.log(`Package ${PACKAGE_NAME} is published.`);
                     process.exit(0);
