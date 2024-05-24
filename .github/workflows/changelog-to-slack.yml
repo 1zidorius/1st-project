@@ -58,7 +58,7 @@ jobs:
                   isPublished = await checkPackage();
                   if (isPublished) {
                     console.log(`Package ${PACKAGE_NAME} is published.`);
-                    break;
+                    process.exit(0);
                   } else {
                     console.log(`Package ${PACKAGE_NAME} is not published yet.`);
                     await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
@@ -67,11 +67,6 @@ jobs:
                   console.error(error);
                   process.exit(1);
                 }
-              }
-
-              if (isPublished) {
-                console.log(`Package ${PACKAGE_NAME} is published.`);
-                process.exit(0);
               }
 
               console.log(`Timeout reached. Package ${PACKAGE_NAME} is not published.`);
