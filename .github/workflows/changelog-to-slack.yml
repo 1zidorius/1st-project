@@ -33,15 +33,20 @@ jobs:
             const TIMEOUT_MINUTES = 30;
             const CHECK_INTERVAL = 60 * 1000; // 60 seconds
 
+            const requestUrl = 'https://static.parastorage.com/unpkg/' + PACKAGE_NAME + '@' + TARGET_VERSION;
+
             const checkPackage = () => {
-              return fetch('https://static.parastorage.com/unpkg/' + PACKAGE_NAME + '@' + TARGET_VERSION)
+              return fetch(requestUrl)
                 .then(response => {
                   if (response.ok) {
+                    console.log('Package is published.');
                     return true;
                   }
+                  console.log('Package is not published yet.', response.status, response.statusText);
                   return false;
                 })
                 .catch(() => {
+                  console.log('Package is not published yet.', JSON.stringify(error));
                   return false;
                 });
             };
@@ -51,10 +56,8 @@ jobs:
               while (Date.now() < endTime) {
                 const isPublished = await checkPackage();
                 if (isPublished) {
-                  console.log(`Package ${PACKAGE_NAME} is published.`);
                   process.exit(0);
                 } else {
-                  console.log(`Package ${PACKAGE_NAME} is not published yet.`);
                   await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
                 }
               }
