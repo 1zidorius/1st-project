@@ -27,7 +27,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const packageJson = require('./package.json');
+            const packageJson = require('./src/nested-folder/package.json');
             const PACKAGE_NAME = 'ricos-schema';
             const TARGET_VERSION = packageJson.version;
             const TIMEOUT_MINUTES = 30;
