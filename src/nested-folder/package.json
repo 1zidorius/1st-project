@@ -1,11 +1,9 @@
 {
-  "name": "1st-project",
+  "name": "1st-project-nested-folder",
+  "version": "2.0.0",
   "description": "\\",
   "main": "index.js",
   "repository": "https://github.com/1zidorius/1st-project.git",
   "author": "viliusmileris <viliusm@wix.com>",
-  "license": "MIT",
-  "dependencies": {
-    "@octokit/rest": "^20.1.0"
-  }
+  "license": "MIT"
 }

@@ -16,36 +16,32 @@ jobs:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
-            package.json
+            src/nested-folder/package.json
           sparse-checkout-cone-mode: false
-          fetch-depth: 5
 
       - name: Setup dependencies
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-      - name: Check whether version is published
+      - name: Check whether package is published
         uses: actions/github-script@v7
         with:
           script: |
             const packageJson = require('./package.json');
             const PACKAGE_NAME = 'ricos-schema';
-            // const TARGET_VERSION = packageJson.version;
-            const TARGET_VERSION = '10.31.0';
-
-            const TIMEOUT_MINUTES = 4;
+            const TARGET_VERSION = packageJson.version;
+            const TIMEOUT_MINUTES = 30;
             const CHECK_INTERVAL = 60 * 1000; // 60 seconds
 
             const checkPackage = () => {
-              return fetch('https://static.parastorage.com/unpkg/'+ PACKAGE_NAME+ '@' + TARGET_VERSION)
+              return fetch('https://static.parastorage.com/unpkg/' + PACKAGE_NAME + '@' + TARGET_VERSION)
                 .then(response => {
                   if (response.ok) {
-                    console.log('Package with the given version exists!');
                     return true;
                   }
+                  return false;
                 })
                 .catch(() => {
-                  console.log('Target version: '+TARGET_VERSION+' not found');
                   return false;
                 });
             };
@@ -53,18 +49,13 @@ jobs:
             const main = async () => {
               const endTime = Date.now() + TIMEOUT_MINUTES * 60 * 1000;
               while (Date.now() < endTime) {
-                try {
-                  const isPublished = await checkPackage();
-                  if (isPublished) {
-                    console.log(`Package ${PACKAGE_NAME} is published.`);
-                    process.exit(0);
-                  } else {
-                    console.log(`Package ${PACKAGE_NAME} is not published yet.`);
-                    await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
-                  }
-                } catch (error) {
-                  console.error(error);
-                  process.exit(1);
+                const isPublished = await checkPackage();
+                if (isPublished) {
+                  console.log(`Package ${PACKAGE_NAME} is published.`);
+                  process.exit(0);
+                } else {
+                  console.log(`Package ${PACKAGE_NAME} is not published yet.`);
+                  await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
                 }
               }
 
@@ -73,6 +64,7 @@ jobs:
             };
 
             await main();
+
 
   send-message-to-slack:
     needs: verify-package-published
