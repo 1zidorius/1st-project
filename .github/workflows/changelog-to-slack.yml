@@ -42,7 +42,7 @@ jobs:
                 console.log('Package is published.');
                 return true;
               } catch (e) {
-                console.log(`Package is not published yet. Retrying in 1 minute.`);
+                console.log('Package is not published yet. Retrying in 1 minute.' + e.message);
                 return false;
               }
             }
