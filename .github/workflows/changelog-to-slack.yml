@@ -33,6 +33,21 @@ jobs:
             const TIMEOUT_MINUTES = 30;
             const CHECK_INTERVAL = 60 * 1000; // 60 seconds
 
+            const package = PACKAGE_NAME + '@' + TARGET_VERSION;
+            console.log('Checking whether ' + package + ' is published.');
+
+            const checkPackage = () => {
+              try {
+                exec('npm info' + package);
+                console.log('Package is published.');
+                return true;
+              } catch (e) {
+                console.log(`Package is not published yet. Retrying in 1 minute.`);
+                return false;
+              }
+            }
+
+            /*
             const requestUrl = 'https://static.parastorage.com/unpkg/' + PACKAGE_NAME + '@' + TARGET_VERSION;
             console.log('Fetching package from ' + requestUrl);
 
@@ -51,6 +66,7 @@ jobs:
                   return false;
                 });
             };
+            */
 
             const main = async () => {
               const endTime = Date.now() + TIMEOUT_MINUTES * 60 * 1000;
