@@ -36,37 +36,19 @@ jobs:
             const package = PACKAGE_NAME + '@' + TARGET_VERSION;
             console.log('Checking whether ' + package + ' is published.');
 
+            const exec = require('child_process').execSync;
+
             const checkPackage = () => {
               try {
                 exec('npm info' + package);
                 console.log('Package is published.');
                 return true;
               } catch (e) {
-                console.log('Package is not published yet. Retrying in 1 minute.' + e.message);
+                console.log('Package is not published yet. Retrying in 1 minute.');
+                console.log(e.message);
                 return false;
               }
             }
-
-            /*
-            const requestUrl = 'https://static.parastorage.com/unpkg/' + PACKAGE_NAME + '@' + TARGET_VERSION;
-            console.log('Fetching package from ' + requestUrl);
-
-            const checkPackage = () => {
-              return fetch(requestUrl)
-                .then(response => {
-                  if (response.ok) {
-                    console.log('Package is published.');
-                    return true;
-                  }
-                  console.log('Package is not published yet.', response.status, response.statusText);
-                  return false;
-                })
-                .catch(() => {
-                  console.log('Package is not published yet.', JSON.stringify(error));
-                  return false;
-                });
-            };
-            */
 
             const main = async () => {
               const endTime = Date.now() + TIMEOUT_MINUTES * 60 * 1000;
