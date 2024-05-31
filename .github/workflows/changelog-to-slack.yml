@@ -36,11 +36,9 @@ jobs:
             const package = PACKAGE_NAME + '@' + TARGET_VERSION;
             console.log('Checking whether ' + package + ' is published.');
 
-            const exec = require('child_process').execSync;
-
-            const checkPackage = () => {
+            const checkPackage = async () => {
               try {
-                exec('npm info' + package);
+                await exec.exec('npm info' + package);
                 console.log('Package is published.');
                 return true;
               } catch (e) {
