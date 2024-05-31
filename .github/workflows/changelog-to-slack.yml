@@ -38,7 +38,7 @@ jobs:
 
             const checkPackage = async () => {
               try {
-                await exec.exec('npm info' + package);
+                await exec.exec('npm info ' + package);
                 console.log('Package is published.');
                 return true;
               } catch (e) {
