@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
-async function checkPackagePublished(exec, targetPackage, timeoutMinutes) {
+const execa = require('execa')
+
+async function checkPackagePublished(targetPackage, timeoutMinutes) {
   const CHECK_INTERVAL = 60 * 1000; // 60 seconds
   const endTime = Date.now() + timeoutMinutes * 60 * 1000;
 
@@ -7,7 +9,7 @@ async function checkPackagePublished(exec, targetPackage, timeoutMinutes) {
 
   const validatePackageIsPublished = async () => {
     try {
-      await exec('npm', ['info', targetPackage, '--registry=https://npm.dev.wixpress.com']);
+      await execa('npm', ['info', targetPackage, '--registry=https://npm.dev.wixpress.com']);
       console.log('Package is published.');
       return true;
     } catch (e) {

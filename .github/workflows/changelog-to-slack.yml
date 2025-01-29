@@ -24,6 +24,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
+      - run: npm install execa
       - name: Check whether package is published
         uses: actions/github-script@v7
         with:
@@ -33,7 +34,7 @@ jobs:
             const TIMEOUT_MINUTES = 30;
             const TARGET_PACKAGE = packageJson.name + '@' + packageJson.version;
 
-            await checkPackagePublished(exec, TARGET_PACKAGE, TIMEOUT_MINUTES);
+            await checkPackagePublished(TARGET_PACKAGE, TIMEOUT_MINUTES);
 
 
   send-message-to-slack:
