@@ -33,7 +33,7 @@ jobs:
             const TIMEOUT_MINUTES = 30;
             const TARGET_PACKAGE = packageJson.name + '@' + packageJson.version;
 
-            await checkPackagePublished(TARGET_PACKAGE, TIMEOUT_MINUTES);
+            await checkPackagePublished(exec, TARGET_PACKAGE, TIMEOUT_MINUTES);
 
 
   send-message-to-slack:

@@ -1,7 +1,5 @@
 /* eslint-disable no-console */
-const { exec } = require('@actions/exec');
-
-async function checkPackagePublished(targetPackage, timeoutMinutes) {
+async function checkPackagePublished(exec, targetPackage, timeoutMinutes) {
   const CHECK_INTERVAL = 60 * 1000; // 60 seconds
   const endTime = Date.now() + timeoutMinutes * 60 * 1000;
 
