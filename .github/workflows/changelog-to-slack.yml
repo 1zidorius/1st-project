@@ -102,34 +102,64 @@ jobs:
             const slackifyMarkdown = require('slackify-markdown');
             const { CHANGELOG } = process.env;
             const message = slackifyMarkdown(CHANGELOG);
-            console.log(message);
-            return JSON.stringify(message);
+
+            function splitStringifiedJSON(jsonObject, maxLength = 3000, splitChar = '•') {
+            const jsonString = JSON.stringify(jsonObject);
+            if (jsonString.length <= maxLength) {
+              return [jsonString];
+            }
+
+            const sections = [];
+            let currentSection = '';
+            const parts = jsonString.split(splitChar);
+
+            parts.forEach((part, index) => {
+              const addition = (index > 0 ? splitChar : '') + part;
+              if ((currentSection + addition).length > maxLength) {
+                sections.push(currentSection);
+                currentSection = addition;
+              } else {
+                currentSection += addition;
+              }
+            });
+
+            if (currentSection.trim()) {
+              sections.push(currentSection);
+            }
+
+            return sections;
+            }
+
+            const sections = splitStringifiedJSON(message);
+
+            return {
+              blocks: [
+                {
+                  type: 'section',
+                  fields: [
+                    {
+                      type: 'plain_text',
+                      text: 'New version of Ricos has been released!',
+                    },
+                  ],
+                },
+                 ...sections.map(section => {
+                  return {
+                    type: 'section',
+                    text: {
+                      type: 'mrkdwn',
+                      text: JSON.parse(section),
+                    },
+                  };
+                }),
+              ],
+            };
 
       - name: Send message to Slack
         uses: slackapi/slack-github-action@v1.26.0
         with:
             channel-id: ${env.SLACK_CHANNEL_ID}
-            payload: |
-              {
-                "blocks": [
-                  {
-                    "type": "section",
-                    "fields": [
-                      {
-                        "type": "plain_text",
-                        "text": "New version of Ricos has been released!"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": ${{steps.set-result.outputs.result}}
-                    }
-                  }
-                ]
-              }
+            payload: ${{steps.set-result.outputs.result}}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
