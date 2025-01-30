@@ -20,6 +20,22 @@
   - [#6376](https://github.com/wix/ricos/issues/6376) fix changelog to slack github action setup
 - `*`
   - [#6376](https://github.com/wix/ricos/issues/6376) fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setup
+- `*`
+  - [#6376](https://github.com/wix/ricos/issues/6376) fix changelog to slack github action setup
+- `*`
+  - [#6376](https://github.com/wix/ricos/issues/6376) fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setup
+- `*`
+  - [#6376](https://github.com/wix/ricos/issues/6376) yoo fix changelog to slack github action setup
+- `*`
+  - [#6376](https://github.com/wix/ricos/issues/6376) fix changelog to slack github action setup
+- `*`
+  - [#6376](https://github.com/wix/ricos/issues/6376) fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setup
+- `*`
+  - [#6376](https://github.com/wix/ricos/issues/6376) yoo fix changelog to slack github action setup
+- `*`
+  - [#6376](https://github.com/wix/ricos/issues/6376) fix changelog to slack github action setup
+- `*`
+  - [#6376](https://github.com/wix/ricos/issues/6376) fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setup fix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setupfix changelog to slack github action setup
 
 ## 10.21.9 (April 4, 2024)
 
