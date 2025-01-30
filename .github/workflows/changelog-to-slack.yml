@@ -132,7 +132,7 @@ jobs:
 
             const sections = splitStringifiedJSON(message);
 
-            return {
+            return JSON.stringify({
               blocks: [
                 {
                   type: 'section',
@@ -153,7 +153,7 @@ jobs:
                   };
                 }),
               ],
-            };
+            });
 
       - name: Send message to Slack
         uses: slackapi/slack-github-action@v1.26.0
