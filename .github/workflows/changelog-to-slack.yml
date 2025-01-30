@@ -148,7 +148,7 @@ jobs:
                     type: 'section',
                     text: {
                       type: 'mrkdwn',
-                      text: JSON.parse(section),
+                      text: section,
                     },
                   };
                 }),
