@@ -17,24 +17,54 @@ jobs:
         with:
           sparse-checkout: |
             src/nested-folder/package.json
-            scripts/check-package-published.js
+            scripts
           sparse-checkout-cone-mode: false
 
       - name: Setup dependencies
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-      - run: npm install execa
       - name: Check whether package is published
         uses: actions/github-script@v7
         with:
           script: |
-            const { checkPackagePublished } = require('./scripts/check-package-published.js');
             const packageJson = require('./src/nested-folder/package.json');
+            const PACKAGE_NAME = 'ricos-schema';
+            const TARGET_VERSION = packageJson.version;
             const TIMEOUT_MINUTES = 30;
-            const TARGET_PACKAGE = packageJson.name + '@' + packageJson.version;
+            const CHECK_INTERVAL = 60 * 1000; // 60 seconds
 
-            await checkPackagePublished(TARGET_PACKAGE, TIMEOUT_MINUTES);
+            const package = PACKAGE_NAME + '@' + TARGET_VERSION;
+            console.log('Checking whether ' + package + ' is published.');
+
+            const checkPackage = async () => {
+              try {
+                await exec.exec('npm info ' + package);
+                console.log('Package is published.');
+                return true;
+              } catch (e) {
+                console.log('Package is not published yet. Retrying in 1 minute.');
+                console.log(e.message);
+                return false;
+              }
+            }
+
+            const main = async () => {
+              const endTime = Date.now() + TIMEOUT_MINUTES * 60 * 1000;
+              while (Date.now() < endTime) {
+                const isPublished = await checkPackage();
+                if (isPublished) {
+                  process.exit(0);
+                } else {
+                  await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
+                }
+              }
+
+              console.log(`Timeout reached. Package ${PACKAGE_NAME} is not published.`);
+              process.exit(1);
+            };
+
+            await main();
 
 
   send-message-to-slack:
