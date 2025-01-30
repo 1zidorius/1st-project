@@ -29,7 +29,7 @@ jobs:
         with:
           script: |
             const packageJson = require('./src/nested-folder/package.json');
-            const PACKAGE_NAME = 'ricos-schema';
+            const PACKAGE_NAME = '@wix/ricos';
             const TARGET_VERSION = packageJson.version;
             const TIMEOUT_MINUTES = 30;
             const CHECK_INTERVAL = 60 * 1000; // 60 seconds
