@@ -1,0 +1,9 @@
+{
+  "name": "@wix/ricos",
+  "version": "10.117.2",
+  "description": "\\",
+  "main": "index.js",
+  "repository": "https://github.com/1zidorius/1st-project.git",
+  "author": "viliusmileris <viliusm@wix.com>",
+  "license": "MIT"
+}

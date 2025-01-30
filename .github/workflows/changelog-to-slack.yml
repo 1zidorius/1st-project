@@ -2,19 +2,74 @@ name: "Notify Slack on Version Bump PR"
 
 on:
   pull_request:
-    branches:
-      - master
-    types:
-      - closed
+    types: [opened, synchronize]
 
 env:
   SLACK_CHANNEL_ID: 'ricos-dev-releases'
 
 jobs:
-  notify_slack:
-    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'release(*):')
+  verify-package-published:
+    if: startsWith(github.event.pull_request.title, 'release(*):')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            src/nested-folder/package.json
+            scripts
+          sparse-checkout-cone-mode: false
 
+      - name: Setup dependencies
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      - name: Check whether package is published
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const packageJson = require('./src/nested-folder/package.json');
+            const PACKAGE_NAME = '@wix/ricos';
+            const TARGET_VERSION = packageJson.version;
+            const TIMEOUT_MINUTES = 30;
+            const CHECK_INTERVAL = 60 * 1000; // 60 seconds
+
+            const package = PACKAGE_NAME + '@' + TARGET_VERSION;
+            console.log('Checking whether ' + package + ' is published.');
+
+            const checkPackage = async () => {
+              try {
+                await exec.exec('npm info ' + package);
+                console.log('Package is published.');
+                return true;
+              } catch (e) {
+                console.log('Package is not published yet. Retrying in 1 minute.');
+                console.log(e.message);
+                return false;
+              }
+            }
+
+            const main = async () => {
+              const endTime = Date.now() + TIMEOUT_MINUTES * 60 * 1000;
+              while (Date.now() < endTime) {
+                const isPublished = await checkPackage();
+                if (isPublished) {
+                  process.exit(0);
+                } else {
+                  await new Promise(resolve => setTimeout(resolve, CHECK_INTERVAL));
+                }
+              }
+
+              console.log(`Timeout reached. Package ${PACKAGE_NAME} is not published.`);
+              process.exit(1);
+            };
+
+            await main();
+
+
+  send-message-to-slack:
+    needs: verify-package-published
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,35 +101,66 @@ jobs:
           script: |
             const slackifyMarkdown = require('slackify-markdown');
             const { CHANGELOG } = process.env;
-            const message = slackifyMarkdown(CHANGELOG);
-            console.log(message);
-            return message;
+            const slackMarkdown = slackifyMarkdown(CHANGELOG);
+
+            function splitStringifiedMarkdown(markdown, maxLength = 3000) {
+              if (markdown.length <= maxLength) {
+                return [markdown];
+              }
+
+              const sections = [];
+              let currentSection = '';
+              const parts = markdown.split(/\n/);
+
+              parts.forEach((part, index) => {
+                const addition = (index > 0 ? '\n' : '') + part;
+                if ((currentSection + addition).length > maxLength) {
+                  sections.push(currentSection);
+                  currentSection = part;
+                } else {
+                  currentSection += addition;
+                }
+              });
+
+              if (currentSection.trim()) {
+                sections.push(currentSection);
+              }
+
+              return sections;
+            }
+
+            const sections = splitStringifiedMarkdown(slackMarkdown);
+
+            const result = JSON.stringify({
+              blocks: [
+                {
+                  type: 'section',
+                  fields: [
+                    {
+                      type: 'plain_text',
+                      text: 'New version of Ricos has been released!',
+                    },
+                  ],
+                },
+                 ...sections.map(section => {
+                  return {
+                    type: 'section',
+                    text: {
+                      type: 'mrkdwn',
+                      text: section,
+                    },
+                  };
+                }),
+              ],
+            });
+            console.log(result);
+            return result;
 
       - name: Send message to Slack
         uses: slackapi/slack-github-action@v1.26.0
         with:
             channel-id: ${env.SLACK_CHANNEL_ID}
-            payload: |
-              {
-                "blocks": [
-                  {
-                    type: 'section',
-                    fields: [
-                      {
-                        type: 'plain_text',
-                        text: 'New version of Ricos has been released! :rich-content-platform:',
-                      },
-                    ],
-                  },
-                  {
-                    type: 'section',
-                    text: {
-                      type: 'mrkdwn',
-                      text: ${{steps.set-result.outputs.result}},
-                    },
-                  }
-                ]
-              }
+            payload: ${{steps.set-result.outputs.result}}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
