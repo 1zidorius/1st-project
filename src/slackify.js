@@ -7,21 +7,20 @@ const changelogPath = path.join(__dirname, '../CHANGELOG.md');
 const CHANGELOG = fs.readFileSync(changelogPath, 'utf8');
 const message = slackifyMarkdown(CHANGELOG);
 
-function splitStringifiedJSON(jsonObject, maxLength = 3000, splitChar = '•') {
-  const jsonString = JSON.stringify(jsonObject);
-  if (jsonString.length <= maxLength) {
-    return [jsonString];
+function splitStringifiedMarkdown(markdown, maxLength = 3000) {
+  if (markdown.length <= maxLength) {
+    return [markdown];
   }
 
   const sections = [];
   let currentSection = '';
-  const parts = jsonString.split(splitChar);
+  const parts = markdown.split(/\n/);
 
   parts.forEach((part, index) => {
-    const addition = (index > 0 ? splitChar : '') + part;
+    const addition = (index > 0 ? '\n' : '') + part;
     if ((currentSection + addition).length > maxLength) {
       sections.push(currentSection);
-      currentSection = addition;
+      currentSection = part;
     } else {
       currentSection += addition;
     }
@@ -34,7 +33,7 @@ function splitStringifiedJSON(jsonObject, maxLength = 3000, splitChar = '•') {
   return sections;
 }
 
-const sections = splitStringifiedJSON(message);
+const sections = splitStringifiedMarkdown(message);
 
 const result = JSON.stringify({
   blocks: [

@@ -101,36 +101,35 @@ jobs:
           script: |
             const slackifyMarkdown = require('slackify-markdown');
             const { CHANGELOG } = process.env;
-            const message = slackifyMarkdown(CHANGELOG);
+            const slackMarkdown = slackifyMarkdown(CHANGELOG);
 
-            function splitStringifiedJSON(jsonObject, maxLength = 3000, splitChar = '•') {
-            const jsonString = JSON.stringify(jsonObject);
-            if (jsonString.length <= maxLength) {
-              return [jsonString];
-            }
-
-            const sections = [];
-            let currentSection = '';
-            const parts = jsonString.split(splitChar);
-
-            parts.forEach((part, index) => {
-              const addition = (index > 0 ? splitChar : '') + part;
-              if ((currentSection + addition).length > maxLength) {
-                sections.push(currentSection);
-                currentSection = addition;
-              } else {
-                currentSection += addition;
+            function splitStringifiedMarkdown(markdown, maxLength = 3000) {
+              if (markdown.length <= maxLength) {
+                return [markdown];
               }
-            });
 
-            if (currentSection.trim()) {
-              sections.push(currentSection);
+              const sections = [];
+              let currentSection = '';
+              const parts = markdown.split(/\n/);
+
+              parts.forEach((part, index) => {
+                const addition = (index > 0 ? '\n' : '') + part;
+                if ((currentSection + addition).length > maxLength) {
+                  sections.push(currentSection);
+                  currentSection = part;
+                } else {
+                  currentSection += addition;
+                }
+              });
+
+              if (currentSection.trim()) {
+                sections.push(currentSection);
+              }
+
+              return sections;
             }
 
-            return sections;
-            }
-
-            const sections = splitStringifiedJSON(message);
+            const sections = splitStringifiedMarkdown(slackMarkdown);
 
             const result = JSON.stringify({
               blocks: [
